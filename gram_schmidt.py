@@ -1,3 +1,4 @@
+from typing import List
 import pandas as pd
 import numpy as np
 from pandas import DataFrame, Series
@@ -62,27 +63,28 @@ class GramSchmidt():
 # ------------------------------------------------------------------------------------
 
 # ---------------- Solving the System --------------------------- 
-    def solve_system(self):
+    def solve_system(self) -> Series:
         # Calculate the transpose of the matrix Q
         qt = self.q.T
 
         # Performing the multiplication between the QT anb the b vector
         new_output = Math.matrix_multiplication(qt, self.b)
-        print('The new output:')
-        print(new_output)
+        # print('The new output:')
+        # print(new_output)
 
-        # Generate expressions and solve the system (to be continued ...)
+        # Initializing the x list that holds the system resolution
+        x = [None for _ in range(self.b.size)]
 
-        # for test ....
-        # print()
-        # print("The original Q matrix: ")
-        # print(self.q)
+        # Solve the system
+        for i in range(self.r.shape[0] -1, -1, -1):
+            # print(self.r.iloc[i,:])
+            s = 0
+            for j in range(self.r.shape[1] -1, i, -1):
+                s+= (self.r.iloc[i,j] * x[j])
 
-        # print()
-        # print("The QT matrix:")
-        # print(qt)
+            x[i] = (new_output[i] - s) / self.r.iloc[i,i]
 
-        # print()
-        # print("We must get the identity matrix: ")
-        # resultant  = Math.matrix_multiplication(qt, self.q)
-        # print(resultant.round(decimals=3))
+        x_series = Series(x)
+        # print(x_series.round(decimals=3))
+        return x_series        
+        
